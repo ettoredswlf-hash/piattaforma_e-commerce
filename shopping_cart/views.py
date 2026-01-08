@@ -20,3 +20,13 @@ def cart_remove(request, product_id: int):
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
     return redirect("shopping_cart:cart_detail")
+
+def cart_update(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == "POST":
+        qty = int(request.POST.get("qty", 1))
+        cart.add(product, qty=qty, override_qty=True)
+
+    return redirect("shopping_cart:cart_detail")

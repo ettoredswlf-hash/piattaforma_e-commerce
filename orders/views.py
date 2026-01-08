@@ -14,6 +14,10 @@ def order_create(request):
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+        if request.user.is_authenticated:
+            order.user = request.user
+            order.save()
+
 
             for item in cart:
                 OrderItem.objects.create(
