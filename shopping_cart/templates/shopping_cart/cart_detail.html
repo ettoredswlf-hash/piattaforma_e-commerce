@@ -1,43 +1,58 @@
 {% extends "catalog/base.html" %}
 
-{% block title %}Cart{% endblock %}
-
 {% block content %}
-<h2>Your cart</h2>
+<h2>Cart</h2>
 
 {% if cart|length == 0 %}
-    <p>Your cart is empty.</p>
-    <p><a href="{% url 'catalog:product_list' %}">Back to products</a></p>
+  <p>Cart is empty</p>
 {% else %}
-<table border="1" cellpadding="8">
-    <tr>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
         <th>Product</th>
         <th>Qty</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th></th>
-    </tr>
+        <th>Unit price</th>
+        <th>Line total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
 
-    {% for item in cart %}
-    <tr>
+    <tbody>
+      {% for item in cart %}
+      <tr>
         <td>{{ item.product.name }}</td>
-        <td>{{ item.qty }}</td>
+
+        <td style="white-space: nowrap;">
+          <!-- Bottone - -->
+          <form method="post" action="{% url 'shopping_cart:cart_update' item.product.id %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="qty" value="{{ item.qty|add:'-1' }}">
+            <button type="submit">−</button>
+          </form>
+
+          <strong style="margin: 0 10px;">{{ item.qty }}</strong>
+
+          <!-- Bottone + -->
+          <form method="post" action="{% url 'shopping_cart:cart_update' item.product.id %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="qty" value="{{ item.qty|add:'1' }}">
+            <button type="submit">+</button>
+          </form>
+        </td>
+
         <td>€{{ item.price }}</td>
         <td>€{{ item.total_price }}</td>
+
         <td>
-            <a href="{% url 'shopping_cart:cart_remove' item.product.id %}">
-                Remove
-            </a>
+          <a href="{% url 'shopping_cart:cart_remove' item.product.id %}">Remove</a>
         </td>
-    </tr>
-    {% endfor %}
-</table>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-<p><strong>Cart total:</strong> €{{ cart.get_total_price }}</p>
-<p>
-  <a href="{% url 'orders:order_create' %}">Proceed to checkout</a>
-</p>
+  <p><strong>Total:</strong> €{{ cart.get_total_price }}</p>
 
+  <p><a href="{% url 'orders:order_create' %}">Proceed to checkout</a></p>
 {% endif %}
-
 {% endblock %}
