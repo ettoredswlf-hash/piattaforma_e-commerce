@@ -6,15 +6,23 @@
 <h2>Product list</h2>
 
 {% for product in products %}
-    <div class="product">
-        <h3>
-            <a href="{% url 'catalog:product_detail' product.pk %}">
-                {{ product.name }}
-            </a>
-        </h3>
-        <p>{{ product.description|truncatechars:120 }}</p>
-        <p><strong>Price:</strong> €{{ product.price }}</p>
-    </div>
+  <div class="product">
+    <h3>
+        <a href="{% url 'catalog:product_detail' product.pk %}">
+            {{ product.name }}
+        </a>
+    </h3>
+
+    <p>{{ product.description|truncatechars:120 }}</p>
+    <p><strong>Price:</strong> €{{ product.price }}</p>
+
+    <p>
+        <a href="{% url 'catalog:product_detail' product.pk %}">View</a>
+        |
+        <a href="{% url 'shopping_cart:cart_add' product.id %}">Add to cart</a>
+    </p>
+</div>
+
 {% empty %}
     <p>No products available.</p>
 {% endfor %}

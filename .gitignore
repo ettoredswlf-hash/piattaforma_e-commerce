@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+*.log
+db.sqlite3-journal
+media/
+
+# IDE
+.vscode/
+.idea/

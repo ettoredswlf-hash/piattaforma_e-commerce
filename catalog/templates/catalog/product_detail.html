@@ -14,3 +14,19 @@
 
 <p><a href="{% url 'catalog:product_list' %}">← Back to products</a></p>
 {% endblock %}
+
+<p>
+  <a href="{% url 'shopping_cart:cart_add' product.id %}">
+    Add to cart
+  </a>
+</p>
+
+<p>
+  <a href="{% url 'cart:cart_add' product.id %}">Add to cart</a>
+</p>
+
+<p>
+  <a href="{% url 'shopping_cart:cart_add' product.id %}">
+    Add to cart
+  </a>
+</p>
