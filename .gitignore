@@ -10,3 +10,9 @@ media/
 # IDE
 .vscode/
 .idea/
+
+db.sqlite3
+*.pyc
+__pycache__/
+media/
+.env
