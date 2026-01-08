@@ -62,3 +62,9 @@ class Cart:
             Decimal(item["price"]) * item["qty"]
             for item in self.cart.values()
         )
+
+    def clear(self):
+        """Remove cart from session."""
+        self.session.pop(self.SESSION_KEY, None)
+        self.save()
+  

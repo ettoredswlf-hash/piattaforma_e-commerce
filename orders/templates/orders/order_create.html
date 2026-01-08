@@ -1,0 +1,22 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+<h3>Order summary</h3>
+<ul>
+  {% for item in cart %}
+    <li>{{ item.product.name }} × {{ item.qty }} — €{{ item.total_price }}</li>
+  {% endfor %}
+</ul>
+<p><strong>Total:</strong> €{{ cart.get_total_price }}</p>
+
+<h3>Customer details</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Place order</button>
+</form>
+{% endblock %}

@@ -34,6 +34,10 @@
 </table>
 
 <p><strong>Cart total:</strong> €{{ cart.get_total_price }}</p>
+<p>
+  <a href="{% url 'orders:order_create' %}">Proceed to checkout</a>
+</p>
+
 {% endif %}
 
 {% endblock %}
