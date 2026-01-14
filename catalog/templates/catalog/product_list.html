@@ -1,29 +1,42 @@
 {% extends "catalog/base.html" %}
 
-{% block title %}Products{% endblock %}
+{% block title %}Prodotti{% endblock %}
 
 {% block content %}
-<h2>Product list</h2>
+<h1 class="h1">Prodotti</h1>
+<p class="muted">Seleziona un prodotto per vedere i dettagli oppure aggiungilo al carrello.</p>
 
-{% for product in products %}
-  <div class="product">
-    <h3>
-        <a href="{% url 'catalog:product_detail' product.pk %}">
-            {{ product.name }}
-        </a>
-    </h3>
+<div class="grid">
+  {% for product in products %}
+    <div class="card">
+      {% if product.image %}
+        <img class="thumb" src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+        <div class="thumb" style="display:flex; align-items:center; justify-content:center;">
+          <span class="muted">Nessuna immagine</span>
+        </div>
+      {% endif %}
 
-    <p>{{ product.description|truncatechars:120 }}</p>
-    <p><strong>Price:</strong> €{{ product.price }}</p>
+      <div style="margin-top:12px;">
+        <div class="h2">{{ product.name }}</div>
+        <div class="price">€{{ product.price }}</div>
+        {% if product.description %}
+          <p class="muted" style="margin:10px 0 0;">
+            {{ product.description|truncatechars:110 }}
+          </p>
+        {% endif %}
+      </div>
 
-    <p>
-        <a href="{% url 'catalog:product_detail' product.pk %}">View</a>
-        |
-        <a href="{% url 'shopping_cart:cart_add' product.id %}">Add to cart</a>
-    </p>
+      <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+        <a class="btn" href="{% url 'catalog:product_detail' product.pk %}">Dettaglio</a>
+        <a class="btn btn-primary" href="{% url 'shopping_cart:cart_add' product.id %}">Add to cart</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="card">
+      <p>Nessun prodotto disponibile.</p>
+      <p class="muted">Aggiungi prodotti dal pannello admin.</p>
+    </div>
+  {% endfor %}
 </div>
-
-{% empty %}
-    <p>No products available.</p>
-{% endfor %}
 {% endblock %}

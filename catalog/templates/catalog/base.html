@@ -1,39 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<!doctype html>
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <nav style="margin: 10px 0;">
-  {% if user.is_authenticated %}
-  <span>Ciao, <strong>{{ user.username }}</strong></span>
-  |
-  <form method="post" action="{% url 'logout' %}" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-  </form>
-{% else %}
-  <a href="{% url 'login' %}">Login</a>
-  | <a href="/accounts/signup/">Registrati</a>
-{% endif %}
-
-</nav>
-<hr>
-
-    <title>{% block title %}E-commerce{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        header { margin-bottom: 30px; }
-        .product { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; }
-        a { text-decoration: none; color: #0066cc; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Il mio e-commerce{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
 
-<header>
-    <h1><a href="{% url 'catalog:product_list' %}">My E-commerce</a></h1>
+<header class="nav">
+  <div class="container">
+    <div class="brand">
+      <a href="/" style="color:var(--text); text-decoration:none;">Il mio e-commerce</a>
+      <span class="badge">XXXX</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="/cart/">Carrello</a>
+
+      {% if user.is_authenticated %}
+        <span>Ciao, <strong>{{ user.username }}</strong></span>
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button class="btn" type="submit">Logout</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="/accounts/signup/">Registrati</a>
+      {% endif %}
+    </div>
+  </div>
 </header>
 
-{% block content %}{% endblock %}
+<main class="container">
+  {% block content %}{% endblock %}
+  <div class="footer">testtestprovaprova</div>
+</main>
 
 </body>
 </html>

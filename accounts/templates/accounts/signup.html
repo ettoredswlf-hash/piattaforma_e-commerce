@@ -7,10 +7,49 @@
 
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Crea account</button>
+  {% if form.errors %}
+  <div class="card" style="border-color: var(--danger); margin: 12px 0;">
+    <strong>Ci sono errori nel modulo:</strong>
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+
+<div class="form-row">
+  <label for="{{ form.username.id_for_label }}">Nome utente</label>
+  <div>
+    {{ form.username }}
+    {{ form.username.errors }}
+  </div>
+</div>
+
+<div class="form-row">
+  <label for="{{ form.password1.id_for_label }}">Password</label>
+  <div>
+    {{ form.password1 }}
+    <small class="muted">Minimo 8 caratteri.</small>
+    {{ form.password1.errors }}
+  </div>
+</div>
+
+<div class="form-row">
+  <label for="{{ form.password2.id_for_label }}">Conferma password</label>
+  <div>
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+  </div>
+</div>
+
+<div class="form-row">
+  <div></div>
+  <button type="submit" class="btn btn-primary">Crea account</button>
+</div>
+
 </form>
 
+
+
 <p>Hai già un account? <a href="/accounts/login/">Login</a></p>
+
 {% endblock %}
 

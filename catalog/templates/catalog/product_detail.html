@@ -3,30 +3,42 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-<h2>{{ product.name }}</h2>
+<a class="muted" href="{% url 'catalog:product_list' %}">← Torna ai prodotti</a>
 
-{% if product.image %}
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
-{% endif %}
+<div class="card" style="margin-top:12px;">
+  <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:16px; align-items:start;">
+    <div>
+      {% if product.image %}
+        <img class="thumb" style="height:380px;" src="{{ product.image.url }}" alt="{{ product.name }}">
 
-<p>{{ product.description }}</p>
-<p><strong>Price:</strong> €{{ product.price }}</p>
+      {% else %}
+        <div class="thumb" style="height:320px; display:flex; align-items:center; justify-content:center;">
+          <span class="muted">Nessuna immagine</span>
+        </div>
+      {% endif %}
+    </div>
 
-<p><a href="{% url 'catalog:product_list' %}">← Back to products</a></p>
+    <div>
+      <h1 class="h1" style="margin-top:0;">{{ product.name }}</h1>
+      <div class="price" style="font-size:22px;">€{{ product.price }}</div>
+
+      {% if product.description %}
+        <p class="muted" style="margin-top:12px; line-height:1.6;">
+          {{ product.description }}
+        </p>
+      {% else %}
+        <p class="muted" style="margin-top:12px;">Nessuna descrizione.</p>
+      {% endif %}
+
+      <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+        <a class="btn btn-primary" href="{% url 'shopping_cart:cart_add' product.id %}">Add to cart</a>
+        <a class="btn" href="/cart/">Vai al carrello</a>
+      </div>
+
+      <div class="muted" style="margin-top:14px; font-size:12px;">
+        Disponibilità: {% if product.available %}Disponibile{% else %}Non disponibile{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
-
-<p>
-  <a href="{% url 'shopping_cart:cart_add' product.id %}">
-    Add to cart
-  </a>
-</p>
-
-<p>
-  <a href="{% url 'cart:cart_add' product.id %}">Add to cart</a>
-</p>
-
-<p>
-  <a href="{% url 'shopping_cart:cart_add' product.id %}">
-    Add to cart
-  </a>
-</p>

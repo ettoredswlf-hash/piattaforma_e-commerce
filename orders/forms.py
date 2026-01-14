@@ -2,7 +2,16 @@ from django import forms
 from .models import Order
 
 
+# ModelForm = form costruito automaticamente partendo da un modello Django.
+# Vantaggi:
+# - genera in automatico i campi HTML
+# - gestisce validazione base (email valida, max_length, campi obbligatori)
+# - se form.is_valid() allora puoi salvare direttamente nel DB con form.save()
 class OrderCreateForm(forms.ModelForm):
     class Meta:
+        # Indichiamo quale modello usare come "base" del form
         model = Order
-        fields = ["first_name", "last_name", "email", "address", "postal_code", "city"]
+
+        # Selezioniamo SOLO i campi richiesti dalla traccia (e quelli che vogliamo far compilare al cliente).
+        # NON includiamo campi tecnici come created_at/updated_at/paid/user perché li gestiamo noi nel backend.
+        fields = ["name", "surname", "email", "address"]
