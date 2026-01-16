@@ -3,13 +3,33 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<h1 class="h1">Login</h1>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+{% comment %}
+LOGIN DJANGO:
+- Django usa di default il template "registration/login.html"
+- Il form arriva già pronto (AuthenticationForm)
+- Io applico le mie classi CSS (.btn / .btn-primary) per avere coerenza grafica col resto del sito
+{% endcomment %}
 
-<p>Non hai un account? <a href="/accounts/signup/">Registrati</a></p>
+<div class="card" style="max-width: 860px;">
+  <form method="post">
+    {% csrf_token %}
+
+    {# form.as_p stampa già label + input; gli input sono stilizzati dal mio CSS globale #}
+    {{ form.as_p }}
+
+    {% comment %}
+    Bottone di submit:
+    - type="submit" per inviare il form
+    - classi btn + btn-primary per lo stesso stile di "Aggiungi al carrello" / "Procedi con l'ordine"
+    {% endcomment %}
+    <button class="btn btn-primary" type="submit">Login</button>
+  </form>
+
+  <div class="muted" style="margin-top:12px;">
+    Non hai un account?
+    <a class="muted" href="/accounts/signup/" style="font-weight:800; text-decoration:none;">Registrati</a>
+  </div>
+</div>
 {% endblock %}

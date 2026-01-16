@@ -4,37 +4,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {# Titolo pagina: ogni template figlio può sovrascrivere block title #}
   <title>{% block title %}Il mio e-commerce{% endblock %}</title>
+
+  {# CSS principale del progetto (staticfiles) #}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
 
 <header class="nav">
-  <div class="container">
+  <div class="container nav-inner">
+
     <div class="brand">
-      <a href="/" style="color:var(--text); text-decoration:none;">Il mio e-commerce</a>
-      <span class="badge">XXXX</span>
+      {% comment %}
+      Brand link:
+      - porta alla home (lista prodotti)
+      - evito URL hardcoded complessi: la home nel mio progetto è "/"
+      {% endcomment %}
+      <a href="/" class="brand-link">Il mio e-commerce a portata di click</a>
+      <span class="badge">entra segli compra</span>
     </div>
 
     <div class="nav-links">
-      <a href="/cart/">Carrello</a>
+      {% comment %}
+      Link al carrello:
+      - lo stile è "nav-pill" così è coerente con il tema (tipo bottone)
+      - qui uso /cart/ perché è stabile nel mio progetto (prefisso app shopping_cart)
+      {% endcomment %}
+      <a class="nav-pill" href="/cart/">Carrello</a>
 
       {% if user.is_authenticated %}
-        <span>Ciao, <strong>{{ user.username }}</strong></span>
-        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+
+        {% comment %}
+        Area utente (solo se loggato):
+        - "I miei ordini" punta alla pagina dove l'utente vede SOLO i suoi ordini
+        - uso namespace "orders:order_list" per evitare link hardcoded (più robusto)
+        {% endcomment %}
+        <a class="nav-pill" href="{% url 'orders:order_list' %}">I miei ordini</a>
+
+        {# Saluto utente loggato #}
+        <span class="nav-hello">Ciao, <strong>{{ user.username }}</strong></span>
+
+        {% comment %}
+        Logout:
+        - lo faccio in POST (buona pratica: operazioni che modificano sessione non in GET)
+        - csrf_token obbligatorio per protezione CSRF
+        {% endcomment %}
+        <form method="post" action="{% url 'logout' %}" class="nav-form">
           {% csrf_token %}
-          <button class="btn" type="submit">Logout</button>
+          <button class="nav-pill" type="submit">Logout</button>
         </form>
+
       {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="/accounts/signup/">Registrati</a>
+
+        {% comment %}
+        Se non è loggato:
+        - login usa la route Django auth (name='login')
+        - signup nel tuo progetto è /accounts/signup/ (come avevi già)
+        {% endcomment %}
+        <a class="nav-pill" href="{% url 'login' %}">Login</a>
+        <a class="nav-pill primary" href="/accounts/signup/">Registrati</a>
+
       {% endif %}
     </div>
+
   </div>
 </header>
 
-<main class="container">
+<main class="container page">
+  {# Contenuto specifico delle pagine (product_list, product_detail, cart, checkout, ecc.) #}
   {% block content %}{% endblock %}
+
   <div class="footer">testtestprovaprova</div>
 </main>
 

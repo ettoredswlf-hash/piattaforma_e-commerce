@@ -1,58 +1,74 @@
 {% extends "catalog/base.html" %}
 
+{% block title %}Carrello{% endblock %}
+
 {% block content %}
-<h2>Cart</h2>
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+  <div>
+    <h1 class="h1" style="margin-bottom:6px;">Carrello</h1>
+    <p class="muted" style="margin-top:0;">Rivedi i prodotti nel carrello e procedi al checkout.</p>
+  </div>
 
-{% if cart|length == 0 %}
-  <p>Cart is empty</p>
-{% else %}
-  <table border="1" cellpadding="8" cellspacing="0">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>Unit price</th>
-        <th>Line total</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+  <!-- Bottone torna ai prodotti -->
+  <a class="btn" href="{% url 'catalog:product_list' %}">← Continua lo shopping</a>
+</div>
 
-    <tbody>
-      {% for item in cart %}
-      <tr>
-        <td>{{ item.product.name }}</td>
+<div class="card" style="margin-top:12px;">
+  <div style="overflow-x:auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th style="width:170px;">Quantità</th>
+          <th style="width:140px;">Prezzo unità</th>
+          <th style="width:140px;">Prezzo totale</th>
+          <th style="width:120px;">Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart %}
+          {% with product=item.product %}
+          <tr>
+            <td>
+              <!-- Facoltativo: link al dettaglio prodotto -->
+              <a class="muted" style="text-decoration:none;" href="{% url 'catalog:product_detail' product.pk %}">
+                {{ product.name }}
+              </a>
+            </td>
 
-        <td style="white-space: nowrap;">
-          <!-- Bottone - -->
-          <form method="post" action="{% url 'shopping_cart:cart_update' item.product.id %}" style="display:inline;">
-            {% csrf_token %}
-            <input type="hidden" name="qty" value="{{ item.qty|add:'-1' }}">
-            <button type="submit">−</button>
-          </form>
+            <!-- Quantità: layout con - e + -->
+            <td>
+              <div class="qty-box">
+                <a class="btn btn-qty" href="{% url 'shopping_cart:decrease' product.id %}">−</a>
+                <span class="qty-num">{{ item.qty }}</span>
+                <a class="btn btn-qty" href="{% url 'shopping_cart:increase' product.id %}">+</a>
+              </div>
+            </td>
 
-          <strong style="margin: 0 10px;">{{ item.qty }}</strong>
+            <td>€{{ item.price }}</td>
+            <td>€{{ item.total_price }}</td>
 
-          <!-- Bottone + -->
-          <form method="post" action="{% url 'shopping_cart:cart_update' item.product.id %}" style="display:inline;">
-            {% csrf_token %}
-            <input type="hidden" name="qty" value="{{ item.qty|add:'1' }}">
-            <button type="submit">+</button>
-          </form>
-        </td>
+            <td>
+              <a class="btn btn-danger" href="{% url 'shopping_cart:cart_remove' product.id %}">Rimuovi</a>
+            </td>
+          </tr>
+          {% endwith %}
+        {% empty %}
+          <tr>
+            <td colspan="5" class="muted">Il carrello è vuoto.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-        <td>€{{ item.price }}</td>
-        <td>€{{ item.total_price }}</td>
+  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:14px;">
+    <div style="font-weight:800; font-size:18px;">Totale: €{{ cart.get_total_price }}</div>
 
-        <td>
-          <a href="{% url 'shopping_cart:cart_remove' item.product.id %}">Remove</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <p><strong>Total:</strong> €{{ cart.get_total_price }}</p>
-
-  <p><a href="{% url 'orders:order_create' %}">Proceed to checkout</a></p>
-{% endif %}
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a class="btn" href="{% url 'catalog:product_list' %}">Aggiungi altri prodotti</a>
+      <a class="btn btn-primary" href="{% url 'orders:order_create' %}">Procedi al checkout</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Ordine #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+  <div>
+    <h1 class="h1" style="margin-bottom:6px;">Ordine #{{ order.id }}</h1>
+    <p class="muted" style="margin-top:0;">
+      Dettaglio dell'ordine e righe acquistate.
+    </p>
+  </div>
+
+  <!-- Torno alla lista ordini -->
+  <a class="btn" href="{% url 'orders:order_list' %}">← Torna ai miei ordini</a>
+</div>
+
+<div class="card" style="margin-top:12px;">
+  <div class="muted" style="font-size:13px; margin-bottom:10px;">
+    Data: <strong style="color:var(--text);">{{ order.created_at }}</strong> —
+    Stato: <strong style="color:var(--text);">{% if order.paid %}Pagato{% else %}In corso{% endif %}</strong>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th style="width:120px;">Qty</th>
+          <th style="width:140px;">Prezzo</th>
+          <th style="width:160px;">Totale riga</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>€{{ item.price }}</td>
+            <td>€{{ item.get_cost }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; margin-top:14px; font-weight:800; font-size:18px;">
+    Totale ordine: €{{ order.get_total_cost }}
+  </div>
+</div>
+{% endblock %}

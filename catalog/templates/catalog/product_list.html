@@ -3,16 +3,24 @@
 {% block title %}Prodotti{% endblock %}
 
 {% block content %}
-<h1 class="h1">Prodotti</h1>
+<h1 class="h1">Vetrina del mio negozio</h1>
 <p class="muted">Seleziona un prodotto per vedere i dettagli oppure aggiungilo al carrello.</p>
 
 <div class="grid">
   {% for product in products %}
     <div class="card">
+
+      <!-- Box immagine chiaro (packshot): mantiene coerenza con tema scuro -->
       {% if product.image %}
-        <img class="thumb" src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="product-image-box">
+          <img
+            class="product-list-img"
+            src="{{ product.image.url }}"
+            alt="{{ product.name }}"
+          >
+        </div>
       {% else %}
-        <div class="thumb" style="display:flex; align-items:center; justify-content:center;">
+        <div class="product-image-box product-image-placeholder">
           <span class="muted">Nessuna immagine</span>
         </div>
       {% endif %}
@@ -20,8 +28,9 @@
       <div style="margin-top:12px;">
         <div class="h2">{{ product.name }}</div>
         <div class="price">€{{ product.price }}</div>
+
         {% if product.description %}
-          <p class="muted" style="margin:10px 0 0;">
+          <p class="muted" style="margin:10px 0 0; line-height:1.5;">
             {{ product.description|truncatechars:110 }}
           </p>
         {% endif %}
@@ -29,8 +38,9 @@
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
         <a class="btn" href="{% url 'catalog:product_detail' product.pk %}">Dettaglio</a>
-        <a class="btn btn-primary" href="{% url 'shopping_cart:cart_add' product.id %}">Add to cart</a>
+        <a class="btn btn-primary" href="{% url 'shopping_cart:cart_add' product.id %}">Aggiungi al carrello</a>
       </div>
+
     </div>
   {% empty %}
     <div class="card">

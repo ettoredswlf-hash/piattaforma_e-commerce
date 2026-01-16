@@ -1,0 +1,55 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}I miei ordini{% endblock %}
+
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+  <div>
+    <h1 class="h1" style="margin-bottom:6px;">I miei ordini</h1>
+    <p class="muted" style="margin-top:0;">
+      Qui vedo lo storico degli ordini fatti con il mio account.
+    </p>
+  </div>
+
+  <!-- Torno alla vetrina prodotti -->
+  <a class="btn" href="{% url 'catalog:product_list' %}">← Torna ai prodotti</a>
+</div>
+
+<div class="card" style="margin-top:12px;">
+  {% if orders %}
+    <div style="overflow-x:auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:120px;">Ordine</th>
+            <th style="width:220px;">Data</th>
+            <th style="width:160px;">Stato</th>
+            <th style="width:140px;">Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in orders %}
+            <tr>
+              <td>#{{ o.id }}</td>
+              <td>{{ o.created_at }}</td>
+              <td>
+                {% if o.paid %}
+                  Pagato
+                {% else %}
+                  In corso
+                {% endif %}
+              </td>
+              <td>
+                <!-- Link al dettaglio: uso la route namespaced orders:order_detail -->
+                <a class="btn" href="{% url 'orders:order_detail' o.id %}">Dettaglio</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted" style="margin:0;">Non hai ancora effettuato ordini.</p>
+  {% endif %}
+</div>
+{% endblock %}

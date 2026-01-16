@@ -14,9 +14,13 @@ class Product(models.Model):
     # Prezzo: Decimal è migliore di float per i soldi (evita errori di arrotondamento)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
-    # Immagine opzionale del prodotto.
+    # Immagine principale opzionale del prodotto.
     # upload_to="products/" significa: quando carichi dal form/admin, il file finisce in media/products/
     image = models.ImageField(upload_to="products/", blank=True, null=True)
+
+    # Immagini extra opzionali (2–3 immagini per prodotto)
+    image_2 = models.ImageField(upload_to="products/", blank=True, null=True)
+    image_3 = models.ImageField(upload_to="products/", blank=True, null=True)
 
     # Interruttore per "pubblicare o nascondere" un prodotto senza cancellarlo dal DB.
     # Le pagine del sito filtrano available=True per mostrare solo prodotti disponibili.

@@ -12,6 +12,12 @@ class OrderCreateForm(forms.ModelForm):
         # Indichiamo quale modello usare come "base" del form
         model = Order
 
-        # Selezioniamo SOLO i campi richiesti dalla traccia (e quelli che vogliamo far compilare al cliente).
+        # Selezioniamo SOLO i campi  che vogliamo far compilare al cliente).
         # NON includiamo campi tecnici come created_at/updated_at/paid/user perché li gestiamo noi nel backend.
         fields = ["name", "surname", "email", "address"]
+        labels = {"name": "Nome",
+                  "surname": "Cognome",
+                  "email": "Email",
+                  "address": "Indirizzo",
+
+        }

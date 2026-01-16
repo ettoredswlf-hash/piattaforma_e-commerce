@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
 from .forms import OrderCreateForm
-from .models import OrderItem
+from .models import Order, OrderItem
 from shopping_cart.cart import Cart
 
 
@@ -22,7 +24,7 @@ def order_create(request):
 
         # is_valid() controlla i vincoli (email valida, campi obbligatori, lunghezze, ecc.)
         if form.is_valid():
-            # Salvo la "testata" ordine nel DB (Order)
+            # Salvo la "testata" ordine nel DB (Order) ma prima voglio attaccarci l'utente se loggato
             order = form.save(commit=False)
 
             # Se l'utente è autenticato, collego l'ordine al suo account
@@ -52,3 +54,34 @@ def order_create(request):
 
     # Se GET oppure POST non valido: mostro la pagina con form + carrello
     return render(request, "orders/order_create.html", {"cart": cart, "form": form})
+
+
+# Lista ordini dell'utente loggato.
+# - login_required: se non sei loggato ti rimanda al login
+# - filtro per user=request.user: ognuno vede SOLO i suoi ordini
+@login_required
+def order_list(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+
+    return render(
+        request,
+        "orders/order_list.html",
+        {"orders": orders},
+    )
+
+
+# Dettaglio di un singolo ordine dell'utente loggato.
+# Nota: metto user=request.user nel get_object_or_404 così evito che qualcuno
+# provi a vedere un ordine di un altro semplicemente cambiando l'id nell'URL.
+@login_required
+def order_detail(request, order_id: int):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    # Prendo le righe dell'ordine (OrderItem) collegate
+    items = order.items.select_related("product").all()
+
+    return render(
+        request,
+        "orders/order_detail.html",
+        {"order": order, "items": items},
+    )

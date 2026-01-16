@@ -1,113 +1,492 @@
 :root{
-  --bg:#0b1220;
-  --card:#111a2e;
-  --text:#e8eefc;
-  --muted:#a7b3d6;
-  --accent:#4f8cff;
-  --accent2:#22c55e;
-  --danger:#ef4444;
-  --border:rgba(255,255,255,.10);
+  /* Palette e variabili principali del tema */
+  --bg: #0b1220;
+  --surface: rgba(15, 23, 42, 0.70);
+  --surface-2: rgba(15, 23, 42, 0.55);
+  --border: rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.20);
+  --text: #e5e7eb;
+  --muted: rgba(229,231,235,0.78);
+  --primary: #3b82f6;
+
+  --radius-xl: 22px;
+  --radius-lg: 16px;
+  --shadow: 0 20px 50px rgba(0,0,0,0.35);
 }
 
-*{box-sizing:border-box}
+*{ box-sizing: border-box; }
+
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:linear-gradient(180deg,#070b14, #0b1220 40%, #0b1220);
-  color:var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1000px 600px at 20% 0%, rgba(59,130,246,0.22), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(34,211,238,0.10), transparent 55%),
+    var(--bg);
 }
-a{color:var(--accent); text-decoration:none}
-a:hover{text-decoration:underline}
 
-.container{max-width:980px; margin:0 auto; padding:24px}
+/* -------------------------------------------------
+   LAYOUT BASE
+-------------------------------------------------- */
+.container{
+  width: min(1160px, calc(100% - 32px));
+  margin: 0 auto;
+}
 
+.page{
+  padding: 22px 0 40px;
+}
+
+/* -------------------------------------------------
+   TYPOGRAPHY
+-------------------------------------------------- */
+.h1{ font-size: 44px; margin: 18px 0 10px; letter-spacing: -0.5px; }
+.h2{ font-size: 22px; font-weight: 750; letter-spacing: -0.2px; }
+.muted{ color: var(--muted); }
+.price{ font-weight: 800; font-size: 20px; margin-top: 8px; }
+
+/* -------------------------------------------------
+   NAVBAR
+   - Sticky + blur
+   - Brand sempre ordinato (ellipsis se stringa lunga)
+   - Azioni a destra coerenti con lo stile "pill"
+-------------------------------------------------- */
 .nav{
-  border-bottom:1px solid var(--border);
-  background:rgba(10,16,30,.75);
-  backdrop-filter: blur(8px);
+  position: sticky;
+  top:0;
+  z-index: 10;
+  background: rgba(10, 16, 30, 0.78);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.nav .container{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px;
-  padding:14px 24px;
-}
-.brand{
-  display:flex; gap:10px; align-items:center; font-weight:800;
-  letter-spacing:.2px;
-}
-.badge{
-  font-size:12px; padding:4px 10px; border:1px solid var(--border);
-  border-radius:999px; color:var(--muted);
-}
-.nav-links{display:flex; gap:14px; align-items:center; color:var(--muted)}
-.nav-links span{color:var(--muted)}
 
-.card{
-  background:rgba(17,26,46,.85);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
+.nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
 }
+
+/* Blocco brand: titolo + badge */
+.brand{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  min-width: 0; /* serve per far funzionare l'ellipsis */
+}
+
+.brand-link{
+  color: var(--text);
+  text-decoration:none;
+  font-weight: 800;
+
+  /* Evito che il titolo mi spacchi la navbar su schermi stretti */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 520px; /* puoi aumentare/diminuire */
+}
+
+.badge{
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Area link/azioni a destra */
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-left: auto; /* spinge tutto a destra */
+}
+
+/* Saluto utente */
+.nav-hello{
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Form logout inline */
+.nav-form{
+  display:inline;
+  margin: 0;
+}
+
+/* Pill: stile coerente col sito (tipo bottoni ma più “menu”) */
+.nav-pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration:none;
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.nav-pill:hover{
+  border-color: var(--border-strong);
+}
+
+/* Variante primaria (es. Registrati) */
+.nav-pill.primary{
+  background: var(--primary);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Stato “attivo” se vuoi evidenziare un pill (aggiungendo class="is-active" nel template) */
+.nav-pill.is-active{
+  border-color: rgba(59,130,246,0.55);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+/* Responsive navbar */
+@media (max-width: 820px){
+  .nav-inner{
+    align-items: flex-start;
+  }
+
+  .brand-link{
+    max-width: 320px;
+  }
+
+  .nav-links{
+    justify-content: flex-start;
+  }
+}
+
+/* -------------------------------------------------
+   CARDS + GRID
+-------------------------------------------------- */
 .grid{
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:16px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+  margin-top: 16px;
 }
-@media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:600px){ .grid{grid-template-columns:1fr} }
 
-.h1{font-size:34px; margin:0 0 16px}
-.h2{font-size:22px; margin:0 0 12px}
-.muted{color:var(--muted)}
-.price{font-weight:800; font-size:18px}
-
-.btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:8px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--text);
-  padding:10px 14px;
-  border-radius:12px;
-  cursor:pointer;
-}
-.btn:hover{border-color:rgba(255,255,255,.25)}
-.btn-primary{background:var(--accent); border-color:transparent}
-.btn-primary:hover{filter:brightness(1.05)}
-.btn-success{background:var(--accent2); border-color:transparent}
-.btn-danger{background:var(--danger); border-color:transparent}
-
-.thumb{
-  width:100%;
-  height:180px;
-  object-fit: contain;
-  background: #0c1324; /* sfondo scuro dietro le immagini bianche */
-  padding: 10px;
-  border-radius: 12px;
+.card{
+  background: var(--surface);
   border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  box-shadow: var(--shadow);
 }
 
+/* -------------------------------------------------
+   BUTTONS
+-------------------------------------------------- */
+.btn{
+  display:inline-block;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration:none;
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+}
 
-.table{width:100%; border-collapse:collapse}
+.btn:hover{
+  border-color: var(--border-strong);
+}
+
+.btn-primary{
+  background: var(--primary);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Bottone “danger” per Remove */
+.btn-danger{
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #fff;
+}
+
+.btn-danger:hover{
+  border-color: rgba(239, 68, 68, 0.60);
+}
+
+/* -------------------------------------------------
+   FOOTER
+-------------------------------------------------- */
+.footer{
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  color: rgba(229,231,235,0.55);
+  font-size: 12px;
+}
+
+/* -------------------------------------------------
+   PRODUCT IMAGE STYLING
+-------------------------------------------------- */
+.thumb{
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+}
+
+/* Box bianco tipo “packshot” (elimina la sensazione di cornice blu scura) */
+.product-image-box{
+  background: #f8fafc;
+  border-radius: 18px;
+  border: 1px solid rgba(15,23,42,0.10);
+  padding: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+}
+
+.product-list-img{
+  display:block;
+  width:100%;
+  height:220px;
+  object-fit: contain;
+}
+
+.product-image-placeholder{
+  height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.product-detail-img{
+  display:block;
+  width:100%;
+  height:380px;
+  object-fit: contain;
+}
+
+.product-thumbs-row{
+  display:flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.product-thumb{
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  padding: 8px;
+  background: #f8fafc;
+  border: 1px solid rgba(15,23,42,0.12);
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.product-thumb:hover{
+  border-color: rgba(59,130,246,0.55);
+  transform: translateY(-1px);
+}
+
+.product-thumb.is-active{
+  outline: 2px solid rgba(59,130,246,0.90);
+  outline-offset: 2px;
+}
+
+.card .product-image-box{
+  margin-bottom: 12px;
+}
+
+/* -------------------------------------------------
+   TABLE (carrello)
+-------------------------------------------------- */
+.table{
+  width:100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
 .table th, .table td{
-  border-bottom:1px solid var(--border);
-  padding:12px 10px; text-align:left;
+  text-align:left;
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
 }
-.table th{color:var(--muted); font-weight:700}
 
-.footer{margin-top:26px; color:var(--muted); font-size:12px}
+.table thead th{
+  font-weight: 800;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+}
 
-.form-row{
+/* Quantità: box con bottoni piccoli */
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+}
+
+.btn-qty{
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.qty-num{
+  min-width: 26px;
+  text-align:center;
+  font-weight: 800;
+}
+
+/* -------------------------------------------------
+   FORM (checkout): input coerenti col tema
+   NB: form.as_p genera <p><label>..</label><input..></p>
+-------------------------------------------------- */
+form p{
+  margin: 12px 0;
+}
+
+form label{
+  display:inline-block;
+  min-width: 110px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select{
+  width: min(520px, 100%);
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus{
+  border-color: rgba(59,130,246,0.65);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
+}
+
+/* Responsive base */
+@media (max-width: 900px){
+  .h1{ font-size: 34px; }
+}
+
+/* -------------------------------------------------
+   CHECKOUT - SOMMARIO ORDINI (card più "bella")
+   (Queste classi le usi nel template order_create.html)
+-------------------------------------------------- */
+.order-summary{
+  padding: 18px;
+}
+
+/* Header: titolo a sinistra, totale a destra */
+.order-summary-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+/* Totale stile pill */
+.order-summary-total{
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+}
+
+/* Lista senza pallini + spaziatura ordinata */
+.order-summary-list{
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: 220px 1fr; /* colonna label + colonna input */
+  gap: 10px;
+}
+
+/* Riga prodotto: griglia 3 colonne (nome / qty / prezzo) */
+.order-summary-row{
+  display:grid;
+  grid-template-columns: 1fr auto auto;
+  align-items:center;
   gap: 12px;
-  align-items: center;
-  margin: 10px 0;
+
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: var(--surface-2);
 }
 
-.form-row input{
-  width: 100%; /* tutti uguali */
-  max-width: 100%; /* su schermi piccoli non esce fuori */
+.os-name{
+  font-weight: 750;
+  letter-spacing: -0.2px;
 }
 
+.os-qty{
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.os-price{
+  font-weight: 800;
+}
+
+/* Su schermi piccoli mando il prezzo a capo se serve */
+@media (max-width: 520px){
+  .order-summary-row{
+    grid-template-columns: 1fr auto;
+    grid-auto-rows: auto;
+  }
+  .os-price{
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
+/* -------------------------------------------------
+   CHECKOUT GRID (2 colonne)
+-------------------------------------------------- */
+
+/* Griglia 2 colonne: riepilogo + form */
+.checkout-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+/* Barra azioni checkout: bottoni coerenti e allineati */
+.checkout-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+/* Responsive: su schermi piccoli diventa 1 colonna */
+@media (max-width: 900px){
+  .checkout-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Login / Form: distanza tra bottone e campi (coerenza con le altre pagine) */
+form button.btn{
+  margin-top: 10px;
+}

@@ -20,4 +20,5 @@ urlpatterns = [
     # <int:pk> cattura un numero dall'URL e lo passa alla view come parametro pk.
     # Esempio: /products/3/ -> pk=3
     path("products/<int:pk>/", views.product_detail, name="product_detail"),
+    
 ]

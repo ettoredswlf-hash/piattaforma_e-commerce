@@ -1,20 +1,21 @@
- ##piattaforma e-commerce utilizzando Python e Django
-
+# Piattaforma e-commerce con Python e Django
 
 ## Descrizione del progetto
-Questo progetto è una piccola piattaforma e-commerce sviluppata con Python e Django utilizzando **SQLite** come database.
+Questo progetto è una piccola piattaforma e-commerce sviluppata con Python e Django, utilizzando SQLite come database.
 L’applicazione permette di:
 - visualizzare un catalogo prodotti con pagina lista e pagina dettaglio
-- gestire un carrello 
+- gestire un carrello (session-based)
 - creare un ordine a partire dal carrello (checkout)
-- registrare/login/logout utenti e associare gli ordini agli utenti autenticati
-- gestire prodotti e ordini dal pannello Django Admin
+- registrazione / login / logout utenti e associazione ordini agli utenti autenticati
+- gestione prodotti e ordini dal pannello Django Admin
 
-Struttura a app Django:
+### Struttura app Django
 - `catalog`: gestione prodotti e pagine pubbliche
-- `shopping_cart`: carrello session-based (add/remove/update/total)
-- `orders`: creazione ordini e righe ordine (Order + OrderItem)
-- `accounts`: registrazione utente (signup) e integrazione auth di Django
+- `shopping_cart`: carrello session-based (add/remove/increase/decrease/total)
+- `orders`: creazione ordini e righe ordine (Order + OrderItem) + pagina "I miei ordini"
+- `accounts`: registrazione utente (signup) + integrazione auth di Django
+
+> Nota: nomi di classi, variabili e file sono in inglese , mentre l’interfaccia è in italiano.
 
 ---
 

@@ -3,20 +3,65 @@
 {% block title %}Checkout{% endblock %}
 
 {% block content %}
-<h2>Checkout</h2>
+<h1 class="h1">Checkout</h1>
 
-<h3>Order summary</h3>
-<ul>
-  {% for item in cart %}
-    <li>{{ item.product.name }} × {{ item.qty }} — €{{ item.total_price }}</li>
-  {% endfor %}
-</ul>
-<p><strong>Total:</strong> €{{ cart.get_total_price }}</p>
+{% comment %}
+LAYOUT CHECKOUT:
+- uso una griglia 2 colonne: a sinistra il riepilogo, a destra il form cliente
+- su schermi piccoli la griglia va in 1 colonna (gestito via CSS con media query)
+{% endcomment %}
+<div class="checkout-grid">
 
-<h3>Customer details</h3>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Place order</button>
-</form>
+  {% comment %}
+  SOMMARIO ORDINI:
+  - invece della classica lista con i pallini, uso una card più "pulita"
+  - ogni riga è allineata (nome / quantità / totale riga) per essere leggibile
+  {% endcomment %}
+  <div class="card order-summary">
+    <div class="order-summary-head">
+      <div>
+        <div class="h2" style="margin:0;">Sommario ordini</div>
+        <div class="muted" style="margin-top:6px;">Controlla gli articoli prima di confermare.</div>
+      </div>
+
+      <div class="order-summary-total">
+        Totale: <strong>€{{ cart.get_total_price }}</strong>
+      </div>
+    </div>
+
+    <ul class="order-summary-list">
+      {% for item in cart %}
+        <li class="order-summary-row">
+          <span class="os-name">{{ item.product.name }}</span>
+          <span class="os-qty">× {{ item.qty }}</span>
+          <span class="os-price">€{{ item.total_price }}</span>
+        </li>
+      {% empty %}
+        <li class="muted">Il carrello è vuoto.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% comment %}
+  DATI CLIENTE (FORM):
+  - method="post" perché stiamo creando un ordine (best practice: modifiche sempre in POST)
+  - csrf_token obbligatorio in Django per protezione CSRF
+  - form.as_p stampa automaticamente label + input del ModelForm (OrderCreateForm)
+  - metto i bottoni DENTRO il form: solo il submit invia i dati, il link torna al carrello
+  {% endcomment %}
+  <div class="card">
+    <div class="h2" style="margin:0 0 10px;">Dati di spedizione</div>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="checkout-actions">
+        <a class="btn" href="{% url 'shopping_cart:cart_detail' %}">← Torna al carrello</a>
+        <button class="btn btn-primary" type="submit">Procedi con l'ordine</button>
+      </div>
+    </form>
+  </div>
+
+</div>
 {% endblock %}

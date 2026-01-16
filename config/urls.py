@@ -20,7 +20,8 @@ urlpatterns = [
     path("cart/", include("shopping_cart.urls")),
 
     # Ordini (checkout + conferma)
-    path("orders/", include("orders.urls")),
+    path("orders/", include(("orders.urls", "orders"), namespace="orders")),
+
 
     # Registrazione (signup) gestita dalla nostra app accounts
     path("accounts/", include("accounts.urls")),

@@ -8,7 +8,7 @@ from catalog.models import Product
 # Qui salviamo i dati del cliente e le info generali (data, pagato, utente).
 # Un ordine può contenere più prodotti: per quello esiste OrderItem.
 class Order(models.Model):
-    # Dati cliente (come richiesto dalla traccia)
+    # Dati cliente 
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100, blank=True)  # opzionale
     email = models.EmailField()

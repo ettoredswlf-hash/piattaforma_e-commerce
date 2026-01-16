@@ -3,8 +3,8 @@
 {% block title %}Order created{% endblock %}
 
 {% block content %}
-<h2>Thank you!</h2>
-<p>Your order has been created successfully.</p>
-<p><strong>Order number:</strong> {{ order.id }}</p>
-<p><a href="{% url 'catalog:product_list' %}">Continue shopping</a></p>
+<h2>Grazie mille!</h2>
+<p>Il tuo ordine è stato creato con successo.</p>
+<p><strong>Numero ordine:</strong> {{ order.id }}</p>
+<p><a href="{% url 'catalog:product_list' %}">Continua gli acquisti</a></p>
 {% endblock %}
